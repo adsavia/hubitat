@@ -2,7 +2,7 @@
  	Generic ZigBee RGBW Light Modified
 
     Copyright 2016, 2017, 2018 Hubitat Inc.  All Rights Reserved
-	2018-10-24 erkrek
+	2018-10-24 erktrek
 		- copied from examples on github
 		- Added RGB value entry using speech capability
 		- used https://gist.github.com/mjackson/5311256 as example for algorithm
