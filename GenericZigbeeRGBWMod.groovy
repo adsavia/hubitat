@@ -5,6 +5,7 @@
 	2018-10-24 erkrek
 		- copied from examples on github
 		- Added RGB value entry using speech capability
+		- used https://gist.github.com/mjackson/5311256 as example for algorithm
     2018-06-04 maxwell
         -updates to support changeLevel
         -add capability color mode
