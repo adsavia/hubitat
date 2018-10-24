@@ -499,46 +499,54 @@ def intTo8bitUnsignedHex(value) {
 }
 
 def speak(rgbColor) {
-    if (rgbColor == null || !rgbColor.startsWith("#")) return
+    if (rgbColor == null || (!rgbColor.startsWith("#") && !rgbColor.startsWith("."))) return
 
-	def fR = Long.parseLong(rgbColor.substring(1,3),16)/255
-	def fG = Long.parseLong(rgbColor.substring(3,5),16)/255
-	def fB = Long.parseLong(rgbColor.substring(5,7),16)/255
+	def cmd
+	
+	log.debug(rgbColor)
+	if (rgbColor.startsWith("#")){
+		def fR = Long.parseLong(rgbColor.substring(1,3),16)/255
+		def fG = Long.parseLong(rgbColor.substring(3,5),16)/255
+		def fB = Long.parseLong(rgbColor.substring(5,7),16)/255
 
-	def lstRGB = [["R",fR],["G",fG],["B",fB]].sort(false){ it[1] }
-	def cMin = lstRGB[0][1]
-	def cMax = lstRGB[lstRGB.size()-1][1]
-	def delta = cMax - cMin
-	def fH, fS, fL = (cMax + cMin) / 2
+		def lstRGB = [["R",fR],["G",fG],["B",fB]].sort(false){ it[1] }
+		def cMin = lstRGB[0][1]
+		def cMax = lstRGB[lstRGB.size()-1][1]
+		def delta = cMax - cMin
+		def fH, fS, fL = (cMax + cMin) / 2
 
-	if (cMax == cMin) {
-	  // achromatic
-	  fH = 0
-	  fS = 0
-	} else {
-	  delta = cMax - cMin;
-	  fS = (fL > 0.5) ? (delta / (2 - cMax - cMin)) : (delta / (cMax + cMin))
+		if (cMax == cMin) {
+		  // achromatic
+		  fH = 0
+		  fS = 0
+		} else {
+		  delta = cMax - cMin;
+		  fS = (fL > 0.5) ? (delta / (2 - cMax - cMin)) : (delta / (cMax + cMin))
 
-	  switch (cMax) {
-	   case fR: 
-		fH = (fG - fB) / delta + (fG < fB ? 6 : 0)
-		break
-	   case fG: 
-		fH = ((fB - fR) / delta) + 2
-		break
-	   case fB: 
-		fH = ((fR - fG) / delta) + 4
-		break
-	  }
+		  switch (cMax) {
+		   case fR: 
+			fH = (fG - fB) / delta + (fG < fB ? 6 : 0)
+			break
+		   case fG: 
+			fH = ((fB - fR) / delta) + 2
+			break
+		   case fB: 
+			fH = ((fR - fG) / delta) + 4
+			break
+		  }
 
-	  fH /= 6
-	}	
+		  fH /= 6
+		}	
 
-	fH *= 100
-	fS *= 100
-	fL *= 100
-    
-	def cmd = setColor([hue:fH,saturation:fS,level:fL])
+		fH *= 100
+		fS *= 100
+		fL *= 100
+		
+		cmd = setColor([hue:fH,saturation:fS,level:fL])
+	} else if (rgbColor.startsWith(".")){
+		cmd = setColorTemperature(rgbColor.substring(1).toInteger())
+	}
+
 	
 	return cmd
 }
